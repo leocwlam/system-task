@@ -1,0 +1,37 @@
+{
+  "name": "system-task",
+  "version": "0.0.0-development",
+  "description": "> Provide the basic task framework to help initial task implementation.  It can be easy to inject any logging mechanism and integrate with any service framework.",
+  "main": "dist/system-task.min.js",
+  "scripts": {
+    "test": "standard && nyc --report=html --reporter=text mocha tests",
+    "test-continue": "mocha tests --recursive --watch",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "build": "uglifyjs src/*.js -c -m -o dist/system-task.min.js --source-map \"filename='dist/system-task.min.js.map'\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leocwlam/system-task.git"
+  },
+  "author": "Leo Lam <leocwlam@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leocwlam/system-task/issues"
+  },
+  "homepage": "https://github.com/leocwlam/system-task#readme",
+  "dependencies": {
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "coveralls": "^3.0.2",
+    "eslint": "^5.4.0",
+    "eslint-plugin-node": "^9.1.0",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
+    "semantic-release": "^15.9.12",
+    "sinon": "^7.1.0",
+    "standard": "^12.0.1",
+    "uglify-es": "^3.3.9"
+  }
+}
