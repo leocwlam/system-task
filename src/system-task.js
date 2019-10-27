@@ -1,8 +1,6 @@
 'use strict'
 /* eslint-env mocha */
 
-// const generalHelper = require('../lib/generalHelper')
-
 const TYPE = 'System Task'
 
 const asyncForEach = async function (array, callback) {
@@ -14,52 +12,49 @@ const asyncForEach = async function (array, callback) {
 const asyncProcess = async function (items, executeAsyncCall, task, errors = []) {
   const result = []
   let anyIssue = false
-  await asyncForEach(items, async (item) => {
-    if (anyIssue) return
-    try {
-      const processedItem = await executeAsyncCall(task, item)
-      result.push(processedItem)
-    } catch (error) {
-      anyIssue = true
-      errors.push(error)
-    }
-  })
+  if (items) {
+    await asyncForEach(items, async (item) => {
+      if (anyIssue) return
+      try {
+        const processedItem = await executeAsyncCall(task, item)
+        result.push(processedItem)
+      } catch (error) {
+        anyIssue = true
+        errors.push(error)
+      }
+    })
+  }
+
   if (anyIssue) {
     throw errors[0] // just throw the first error
   }
   return result
 }
 
-const syncProcess = function (items, executeAsyncCall, task, errors = []) {
-  return new Promise((resolve, reject) => {
-    const processList = []
-    if (items) {
-      items.forEach(function (item) {
-        const promiseTask = new Promise(async function (resolve, reject) {
-          try {
-            const processedItem = await executeAsyncCall(task, item)
-            resolve(processedItem)
-          } catch (error) {
-            errors.push(error)
-            reject(error)
-          }
-        })
-        processList.push(promiseTask)
-      })
-    }
+const syncProcess = async function (items, executeSyncCall, task, errors = []) {
+  const processList = []
+  if (items) {
+    items.forEach(function (item) {
+      const promiseTask = async () => {
+        try {
+          return await executeSyncCall(task, item)
+        } catch (error) {
+          errors.push(error)
+          throw error
+        }
+      }
+      processList.push(promiseTask)
+    })
+  }
 
-    if (processList.length > 0) {
-      Promise.all(processList)
-        .then((values) => {
-          resolve(values)
-        })
-        .catch((error) => {
-          reject(error)
-        })
-    } else {
-      resolve([])
-    }
-  })
+  if (processList.length > 0) {
+    const promises = processList.map((executeItem) => executeItem())
+
+    const result = await Promise.all(promises)
+    return result
+  } else {
+    return []
+  }
 }
 
 class SystemTask {
@@ -112,7 +107,7 @@ class SystemTask {
       }
       return result
     } catch (error) {
-      await this.log('error', `preprocess`, { Type: this.type, errors })
+      await this.log('error', 'preprocess', { Type: this.type, errors })
       throw error
     }
   }
@@ -129,7 +124,7 @@ class SystemTask {
       }
       return result
     } catch (error) {
-      await this.log('error', `preprocess`, { Type: this.type, errors })
+      await this.log('error', 'process', { Type: this.type, errors })
       throw error
     }
   }
@@ -152,31 +147,33 @@ class SystemTask {
       this.isValidProcess()
 
       // Fail here, should be able to rerun (No Cleanup require)
-      await this.log('info', `Preprocess all records before execute`, { Type: this.type })
+      await this.log('info', 'Preprocess all records before execute', { Type: this.type })
       let preprocessResult = []
       try {
         preprocessResult = await this.preprocess()
       } catch (error) {
-        await this.log('error', `Fail: preprocess`, { Error: error.message, Type: this.type })
+        await this.log('error', 'Fail: preprocess', { Error: error.message, Type: this.type })
         throw error
       }
 
       // Fail here, process is depended which type of asset, it should be able to re-runable.
       // In General, it should not need to cleanup for all the successful during this run,
       // but it is optional to cleanup inside preprocessHandler per base.
-      await this.log('info', `Start process`, { Type: this.type, NumberOfPreprocess: preprocessResult.length })
+      await this.log('info', 'Start process', { Type: this.type, NumberOfPreprocess: preprocessResult.length })
       const processResult = await this.process(preprocessResult)
 
       // Handle the success process assets
-      await this.log('info', `Cleanup processing after process`, { Type: this.type, NumberOfProcess: processResult.length })
+      await this.log('info', 'Cleanup processing after process', { Type: this.type, NumberOfProcess: processResult.length })
       const cleanupResult = await this.cleanup(processResult)
 
-      await this.log('info', `Complete: task`, { Type: this.type, NumberOfCleanup: cleanupResult.length })
+      await this.log('info', 'Complete: task', { Type: this.type, NumberOfCleanup: cleanupResult.length })
     } catch (error) {
-      await this.log('error', `Fail: task`, { Error: error.message, Type: this.type })
+      await this.log('error', 'Fail: task', { Error: error.message, Type: this.type })
       throw error
     }
   }
 }
 
 module.exports = SystemTask
+module.exports.SyncProcess = syncProcess
+module.exports.AsyncProcess = asyncProcess
