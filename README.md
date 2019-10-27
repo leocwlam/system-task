@@ -49,7 +49,7 @@ SystemTask is a base task engine, which handles to process all task items.  It n
 - Implement Custom Task
 
 ``` js
-const SystemTask = require('system-service')
+const SystemTask = require('system-task')
 const TYPE = 'Demo Task'
 
 const DEMOASSET = {
