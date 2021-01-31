@@ -2,7 +2,7 @@
 > Provide the basic task framework to help initial task implementation.  It can be easy to inject any logging mechanism and integrate with any service framework.
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/leocwlam/system-task/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/leocwlam/system-task.svg?branch=master)](https://travis-ci.org/leocwlam/system-task)
+[![Build Status](https://travis-ci.com/leocwlam/system-task.svg?branch=master)](https://travis-ci.com/leocwlam/system-task)
 [![Coverage Status](https://coveralls.io/repos/github/leocwlam/system-task/badge.svg?branch=master)](https://coveralls.io/github/leocwlam/system-task?branch=master)
 [![Dependency Status](https://david-dm.org/leocwlam/system-task.svg)](https://david-dm.org/leocwlam/system-task)
 [![devDependency Status](https://david-dm.org/leocwlam/system-task/dev-status.svg)](https://david-dm.org/leocwlam/system-task?type=dev)
