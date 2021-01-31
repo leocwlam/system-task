@@ -29,6 +29,6 @@
     "semantic-release": "^17.2.1",
     "sinon": "^9.2.0",
     "standard": "^15.0.0",
-    "uglify-es": "^3.3.9"
+    "uglify-es": "^3.3.10"
   }
 }
