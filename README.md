@@ -1,8 +1,9 @@
 # <a name="system-task"></a>system-task
-> Provide the basic task framework to help initial task implementation.  It can be easy to inject any logging mechanism and integrate with any service framework.
+
+> Provide the basic task framework to help initial task implementation. It can be easy to inject any logging mechanism and integrate with any service framework.
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/leocwlam/system-task/blob/master/LICENSE)
-[![Build Status](https://travis-ci.com/leocwlam/system-task.svg?branch=master)](https://travis-ci.com/leocwlam/system-task)
+[![Build Status](https://api.travis-ci.com/leocwlam/system-task.svg?branch=master)](https://app.travis-ci.com/leocwlam/system-task)
 [![Coverage Status](https://coveralls.io/repos/github/leocwlam/system-task/badge.svg?branch=master)](https://coveralls.io/github/leocwlam/system-task?branch=master)
 [![Dependency Status](https://david-dm.org/leocwlam/system-task.svg)](https://david-dm.org/leocwlam/system-task)
 [![devDependency Status](https://david-dm.org/leocwlam/system-task/dev-status.svg)](https://david-dm.org/leocwlam/system-task?type=dev)
@@ -13,7 +14,8 @@
 [![npm badge](https://img.shields.io/npm/v/system-task/latest.svg)](https://www.npmjs.com/package/system-task)
 
 # Contents
--------
+
+---
 
 <p align="center">
     <a href="#install">Install</a> &bull;
@@ -22,34 +24,38 @@
     <a href="#license">License</a>
 </p>
 
--------
+---
 
 # <a href="#system-task">^</a><a name="install"></a>Install
+
 **Install via npm:**
-``` bash
+
+```bash
 npm install system-task --save
 ```
 
 # <a href="#system-task">^</a><a name="definition"></a>Definition
-``` js
-const systemTask = require('system-task')
+
+```js
+const systemTask = require('system-task');
 ```
 
 ## <a name="systemTask"></a>SystemTask
-SystemTask is a base task engine, which handles to process all task items.  It needs to overwritten by the following methods:
+
+SystemTask is a base task engine, which handles to process all task items. It needs to overwritten by the following methods:
 
 | Method                       | Description                      | Overriding Defination                          |
-|------------------------------|----------------------------------|------------------------------------------------|
+| ---------------------------- | -------------------------------- | ---------------------------------------------- |
 | insertPreprocessItemsHandler | Insert items for process         | async insertPreprocessItemsHandler (task)      |
 | preprocessHandler            | Preprocess each item for process | async preprocessHandler (task, preProcessItem) |
 | processHandler               | Execute each task item           | async processHandler (task, processItem)       |
 | cleanupHandler               | Cleanup any processed task items | async cleanupHandler (task, cleanupItems)      |
 
-
 # <a href="#system-task">^</a><a name="get-start"></a>Get Start
+
 - Implement Custom Task
 
-``` js
+```js
 const SystemTask = require('system-task')
 const TYPE = 'Demo Task'
 
@@ -79,7 +85,7 @@ class DemoTask extends SystemTask {
 
   async processHandler (task, processItem) {
     await task.log('info', `execuse`, {Type: task.type, processItem})
-    // processItem can be execute method 
+    // processItem can be execute method
     // e.g. await processItem.execute()
 
     return processItem
@@ -91,14 +97,13 @@ module.exports = DemoTask
 
 - Start up Task
 
-``` js
-const DemoTask = require('./demoTask')
-const task = new DemoTask()
+```js
+const DemoTask = require('./demoTask');
+const task = new DemoTask();
 
-task.start()
+task.start();
 ```
 
-
-
 # <a href="#system-service">^</a><a name="license"></a>License
+
 MIT
