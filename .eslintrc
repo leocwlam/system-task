@@ -24,13 +24,11 @@
         "no-eval": 2,
         "no-inferrable-types": 0,
         "no-string-literal": 0,
-        "no-trailing-whitespace": [true, "ignore-comments"],
+        "no-trailing-whitespace": [0, "ignore-comments"],
         "object-literal-sort-keys": 0,
         "prefer-const": 1,
         "radix": 2,
-        "semicolon": [
-            "always"
-        ],
+        "semicolon": [0, "always"],
         "triple-equals": [
             0,
             "allow-null-check"

@@ -9,7 +9,7 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "uglifyjs src/*.js -c -m -o dist/system-task.min.js --source-map \"filename='dist/system-task.min.js.map'\"",
     "prepare": "husky install",
-    "pre-commit": "standard && pretty-quick --staged"
+    "pre-commit": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -21,19 +21,34 @@
     "url": "https://github.com/leocwlam/system-task/issues"
   },
   "homepage": "https://github.com/leocwlam/system-task#readme",
-  "dependencies": {},
   "devDependencies": {
     "chai": "^4.2.0",
     "coveralls": "^3.1.0",
     "eslint": "^8.13.0",
     "husky": "^8.0.1",
+    "lint-staged": "^15.0.2",
     "mocha": "^10.0.0",
     "nyc": "^15.1.0",
-    "prettier": "^2.2.1",
-    "pretty-quick": "^3.1.0",
-    "semantic-release": "^19.0.2",
-    "sinon": "^14.0.0",
+    "prettier": "^3.0.3",
+    "semantic-release": "^22.0.6",
+    "sinon": "^17.0.0",
     "standard": "^17.0.0",
     "uglify-js": "^3.14.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm test"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js}": [
+      "standard --fix",
+      "eslint --fix",
+      "prettier --single-quote --no-semi --write"
+    ],
+    "*.json": [
+      "prettier --write"
+    ]
   }
 }
